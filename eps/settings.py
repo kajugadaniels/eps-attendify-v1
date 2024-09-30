@@ -20,10 +20,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Third party
     'django.contrib.humanize',
     'whitenoise.runserver_nostatic',
+
+    # Custom apps
+    'home',
 ]
 
 MIDDLEWARE = [
