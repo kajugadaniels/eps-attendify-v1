@@ -38,3 +38,35 @@ def user_login(request):
     }
 
     return render(request, 'auth/login.html', context)
+
+def user_register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            required_fields = ['name', 'email', 'phone_number', 'password']
+            missing_fields = [field for field in required_fields if not form.cleaned_data.get(field)]
+            if missing_fields:
+                messages.error(request, f"{', '.join([field.replace('_', ' ').capitalize() for field in missing_fields])} {'is' if len(missing_fields) == 1 else 'are'} required.")
+            elif form.cleaned_data.get("password") != form.cleaned_data.get("confirm_password"):
+                messages.error(request, "Passwords do not match.")
+            else:
+                try:
+                    user = form.save(commit=False)
+                    user.set_password(form.cleaned_data["password"])
+                    user.save()
+                    messages.success(request, "User registered successfully.")
+                    return redirect('auth:login')
+                except Exception as e:
+                    messages.error(request, f"An error occurred during registration: {str(e)}")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = RegistrationForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'auth/register.html', context)
