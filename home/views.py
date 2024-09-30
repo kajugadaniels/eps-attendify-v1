@@ -54,3 +54,27 @@ def viewEmployees(request, id):
     }
 
     return render(request, 'employees/show.html', context)
+
+@login_required
+def editEmployees(request, id):
+    employee = get_object_or_404(Employee, id=id)
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, request.FILES, instance=employee)
+        if form.is_valid():
+            employee = form.save(commit=False)
+            employee.save()
+            messages.success(request, 'Employee updated successfully.')
+            return redirect('viewEmployees', id=employee.id)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = EmployeeForm(instance=employee)
+
+    context = {
+        'form': form,
+        'employee': employee
+    }
+
+    return render(request, 'employees/edit.html', context)
