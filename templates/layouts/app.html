@@ -26,6 +26,51 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link id="color" rel="stylesheet" href="{% static 'css/color-1.css" media="screen">
     <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
+    <style>
+        .toast-success {
+            background-color: #51A351 !important;
+            color: white;
+        }
+        .toast-error {
+            background-color: #D9534F !important;
+            color: white;
+        }
+        .toast-warning {
+            background-color: #F0AD4E !important;
+            color: white;
+        }
+        .toast-info {
+            background-color: #5BC0DE !important;
+            color: white;
+        }
+
+        /* Custom animation for Toastr notifications */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        .toast {
+            animation: fadeInDown 0.5s, fadeOutUp 0.5s 4.5s;
+        }
+    </style>
 </head>
 <body>
 
@@ -53,5 +98,36 @@
     <script src="{% static 'js/sidebar-menu.js' %}"></script>
     <script src="{% static 'js/sidebar-pin.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "toastClass": 'toast animated'
+            };
+
+            // Display Django messages using Toastr
+            {% if messages %}
+                {% for message in messages %}
+                    var toastrType = "{{ message.tags }}";  // info, success, warning, error
+                    toastr[toastrType]("{{ message.message|escapejs }}");
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
 </body>
 </html>
