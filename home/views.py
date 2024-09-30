@@ -44,3 +44,13 @@ def addEmployees(request):
     }
 
     return render(request, 'employees/create.html', context)
+
+@login_required
+def viewEmployees(request, id):
+    employee = get_object_or_404(Employee, id=id)
+
+    context = {
+        'employee': employee
+    }
+
+    return render(request, 'employees/show.html', context)
