@@ -174,3 +174,5 @@ JAZZMIN_SETTINGS = {
 }
 
 # CSRF_TRUSTED_ORIGINS = ['https://ijambo-ryawe.up.railway.app','https://*.127.0.0.1']
+
+AUTH_USER_MODEL = 'account.User'
