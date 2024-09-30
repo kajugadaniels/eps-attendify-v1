@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Dyna Soft Ltd">
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <title>DynaSoft AMS - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/vendors/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link id="color" rel="stylesheet" href="{% static 'css/color-1.css' %}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-5">
+                <img class="bg-img-cover bg-center" src="https://admin.pixelstrap.net/zono/assets/images/login/3.jpg" alt="register-page">
+            </div>
+            <div class="col-xl-7 p-0">
+                <div class="login-card login-dark login-bg">
+                    <div>
+                        <div>
+                            <a class="logo text-start" href="{% url 'base:dashboard' %}">
+                                <h5 class="text-black fw-bolder">DynaSoft AMS</h5>
+                            </a>
+                        </div>
+                        <div class="login-main"> 
+                            <form class="theme-form" method="POST">
+                                {% csrf_token %}
+                                <h4>Register an account</h4>
+                                <p>Fill in the information below to create an account</p>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Email Address</label>
+                                    {{ form.email }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Full Name</label>
+                                    {{ form.name }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Phone Number</label>
+                                    {{ form.phone_number }}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Password</label>
+                                            {{ form.password }}
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Confirm Password</label>
+                                            {{ form.confirm_password }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Role</label>
+                                    {{ form.role }}
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <button class="btn btn-primary btn-block w-100" type="submit" style="height: 50px;">Register</button>
+                                </div>
+                                <p class="mt-4 mb-0 text-center">Already have an account?<a class="ms-2" href="{% url 'auth:login' %}">Sign in</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% if messages %}
+                    {% for message in messages %}
+                        Swal.fire({
+                            toast: true,
+                            icon: '{% if message.tags %}{{ message.tags }}{% endif %}',
+                            title: '{{ message }}',
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                            customClass: {
+                                popup: 'colored-toast'
+                            }
+                        });
+                    {% endfor %}
+                {% endif %}
+
+                // Display form errors in SweetAlert
+                {% if form.errors %}
+                    let errorMessages = '';
+                    {% for field, errors in form.errors.items %}
+                        errorMessages += '<p>{{ field }}: {{ errors|striptags }}</p>';
+                    {% endfor %}
+                    Swal.fire({
+                        toast: true,
+                        icon: 'error',
+                        title: 'Form submission error',
+                        html: errorMessages,
+                        position: 'top-right',
+                        showConfirmButton: false,
+                        timer: 8000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'colored-toast'
+                        }
+                    });
+                {% endif %}
+            });
+        </script>
+
+        <style>
+            .swal2-toast {
+                background-color: #333;
+                color: #fff;
+            }
+            .colored-toast {
+                background-color: #f27474;
+                border-left: 5px solid #d33;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            }
+            .swal2-title {
+                font-size: 1rem;
+                line-height: 1.5;
+                margin: 0.5rem 0;
+            }
+            .swal2-html-container {
+                font-size: 0.875rem;
+                line-height: 1.2;
+            }
+        </style>
+
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+    </div>
+</body>
+</html>
