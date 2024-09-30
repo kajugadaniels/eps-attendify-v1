@@ -78,3 +78,10 @@ def editEmployees(request, id):
     }
 
     return render(request, 'employees/edit.html', context)
+
+@login_required
+def deleteEmployees(request, id):
+    employee = get_object_or_404(Employee, id=id)
+    employee.delete()
+    messages.success(request, 'Employee deleted successfully.')
+    return redirect('getEmployees')
