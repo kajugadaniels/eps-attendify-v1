@@ -70,3 +70,7 @@ def user_register(request):
     }
 
     return render(request, 'auth/register.html', context)
+
+def user_logout(request):
+    logout(request)
+    return redirect('auth:login')
