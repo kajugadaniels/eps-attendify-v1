@@ -138,9 +138,9 @@ WHITENOISE_AUTOREFRESH = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Ijambo Ryawe",
-    "site_header": "Ijambo Ryawe",
-    "site_brand": "Ijambo Ryawe",
+    "site_title": "EPS",
+    "site_header": "EPS",
+    "site_brand": "EPS",
     "welcome_sign": "Welcome Admin",
     "show_sidebar": True,
     "navigation_expanded": True,
