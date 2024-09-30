@@ -22,3 +22,25 @@ def getEmployees(request):
     }
 
     return render(request, 'employees/index.html', context)
+
+@login_required
+def addEmployees(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, request.FILES)
+        if form.is_valid():
+            employee = form.save(commit=False)
+            employee.save()
+            messages.success(request, 'Employee added successfully.')
+            return redirect('getEmployees')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = EmployeeForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'employees/create.html', context)
