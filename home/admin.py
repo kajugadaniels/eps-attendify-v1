@@ -8,6 +8,6 @@ class PositionAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'national_id', 'email', 'department', 'position', 'date_of_hire', 'tag_id', 'phone_number', 'address']
+    list_display = ['name', 'national_id', 'email', 'department', 'position', 'date_of_hire', 'tag_id', 'phone_number', 'address', 'day_salary']
     search_fields = ['name', 'national_id', 'email']
     list_filter = ['department', 'position', 'date_of_hire']
