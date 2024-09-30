@@ -1,0 +1,104 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-xl-10 col-sm-9 box-col-3">
+                    <h3>Product list</h3>
+                </div>
+                <div class="col-xl-2 col-sm-3 box-col-4">
+                    <a class="btn btn-primary" href="{% url 'base:addEmployees' %}"><i class="fa fa-plus"></i>Add Employee</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="list-product">
+                            <table class="table" id="project-status">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="form-check"> 
+                                                <input class="form-check-input checkbox-primary" type="checkbox">
+                                            </div>
+                                        </th>
+                                        <th> <span class="f-light f-w-600">Name</span></th>
+                                        <th> <span class="f-light f-w-600">National ID</span></th>
+                                        <th> <span class="f-light f-w-600">Email</span></th>
+                                        <th> <span class="f-light f-w-600">Department</span></th>
+                                        <th> <span class="f-light f-w-600">Position</span></th>
+                                        <th> <span class="f-light f-w-600">Hired Date</span></th>
+                                        <th> <span class="f-light f-w-600">Tag ID</span></th>
+                                        <th> <span class="f-light f-w-600">Phone Number</span></th>
+                                        <th> <span class="f-light f-w-600">Address</span></th>
+                                        <th> <span class="f-light f-w-600">Action</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in employees %}
+                                        <tr class="product-removes">
+                                            <td>
+                                                <div class="form-check"> 
+                                                    <input class="form-check-input checkbox-primary" type="checkbox">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="product-names">
+                                                    {% comment %} <div class="light-product-box">
+                                                        <img class="img-fluid" src="{{ employee.image.url }}" alt="laptop">
+                                                    </div> {% endcomment %}
+                                                    <p>{{ employee.name }}</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.national_id }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.email }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.department }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.position }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.date_of_hire }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.tag_id }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.phone_number }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="f-light">{{ employee.address }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="product-action">
+                                                    <a href="add-products.html">
+                                                        <svg>
+                                                            <use href="{% static 'svg/icon-sprite.svg#edit-content' %}"></use>
+                                                        </svg>
+                                                    </a>
+                                                    <svg>
+                                                        <use href="{% static 'svg/icon-sprite.svg#trash1' %}"></use>
+                                                    </svg>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
