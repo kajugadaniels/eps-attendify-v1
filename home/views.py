@@ -3,6 +3,7 @@ from home.models import *
 from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
+from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -112,10 +113,43 @@ def recordAttendance(request):
 
 @login_required
 def getAttendance(request):
-    attendance_records = EmployeeAttendance.objects.all().order_by('-created_at')
+    # Get date range from today to the next 7 days
+    today = timezone.now().date()
+    date_range = [today + timedelta(days=i) for i in range(8)]  # Today + next 7 days
+
+    if request.method == 'POST':
+        # Clear existing attendance records for the date range
+        EmployeeAttendance.objects.filter(created_at__date__in=date_range).delete()
+
+        # Process the submitted attendance data
+        attendance_data = request.POST.getlist('attendance')
+        for item in attendance_data:
+            employee_id, date_str = item.split('_')
+            employee = Employee.objects.get(id=employee_id)
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+            # Create attendance record
+            EmployeeAttendance.objects.create(employee=employee, attended=True, created_at=date)
+
+        messages.success(request, 'Attendance updated successfully.')
+        return redirect('base:getAttendance')
+
+    # Get all employees
+    employees = Employee.objects.all().order_by('name')
+
+    # Get existing attendance records in the date range
+    attendance_records = EmployeeAttendance.objects.filter(created_at__date__in=date_range)
+
+    # Build a set of attendance keys for quick lookup in the template
+    attendance_set = set()
+    for record in attendance_records:
+        key = f"{record.employee.id}_{record.created_at.date()}"
+        attendance_set.add(key)
 
     context = {
-        'attendance_records': attendance_records
+        'employees': employees,
+        'date_range': date_range,
+        'attendance_set': attendance_set,
     }
 
     return render(request, 'attendance/index.html', context)
