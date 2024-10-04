@@ -13,4 +13,6 @@ urlpatterns = [
     path('employee/<int:id>/edit/', editEmployees, name="editEmployees"),
     path('employee/<int:id>/', viewEmployees, name="viewEmployees"),
     path('employee/<int:id>/', deleteEmployees, name="deleteEmployees"),
+    path('attendance/record/', recordAttendance, name='recordAttendance'),
+    path('attendance/', getAttendance, name='getAttendance'),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
