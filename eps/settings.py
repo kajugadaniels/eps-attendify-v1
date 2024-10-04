@@ -173,6 +173,6 @@ JAZZMIN_SETTINGS = {
     "related_modal_active": False,
 }
 
-# CSRF_TRUSTED_ORIGINS = ['https://ijambo-ryawe.up.railway.app','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://eps.up.railway.app','https://*.127.0.0.1']
 
 AUTH_USER_MODEL = 'account.User'
