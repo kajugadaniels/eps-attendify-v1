@@ -113,35 +113,32 @@ def recordAttendance(request):
 
 @login_required
 def getAttendance(request):
-    # Get date range from today to the next 7 days
     today = timezone.now().date()
     date_range = [today + timedelta(days=i) for i in range(8)]  # Today + next 7 days
 
     if request.method == 'POST':
-        # Clear existing attendance records for today
-        EmployeeAttendance.objects.filter(created_at__date=today).delete()
+        attendance_data = request.POST.getlist('attendance[]')  # List of 'employee_id_date_str'
 
-        # Process the submitted attendance data
-        attendance_data = request.POST.getlist('attendance')
         for item in attendance_data:
             employee_id, date_str = item.split('_')
-            employee = Employee.objects.get(id=employee_id)
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-            # Ensure we're only processing today's date
             if date != today:
-                continue  # Skip if not today
+                continue  # Only process attendance for today
 
-            # Create attendance record
-            EmployeeAttendance.objects.create(employee=employee, attended=True, created_at=timezone.now())
+            employee = Employee.objects.get(id=employee_id)
+
+            # Update or create the attendance record for this employee
+            attendance_record, created = EmployeeAttendance.objects.update_or_create(
+                employee=employee,
+                created_at__date=today,
+                defaults={'attended': True, 'created_at': timezone.now()}
+            )
 
         messages.success(request, 'Attendance updated successfully.')
         return redirect('base:getAttendance')
 
-    # Get all employees
     employees = Employee.objects.all().order_by('name')
-
-    # Get existing attendance records for today
     attendance_records = EmployeeAttendance.objects.filter(created_at__date__in=date_range)
 
     # Build a set of attendance keys for quick lookup in the template
