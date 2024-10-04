@@ -1,30 +1,61 @@
 {% extends 'layouts/app.html' %}
+{% load static %}
+{% load humanize %}
 {% block content %}
 
-    <div class="container-fluid">
-        <h3>Employee Attendance Records</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Employee Name</th>
-                    <th>Attended</th>
-                    <th>Date & Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in attendance_records %}
-                    <tr>
-                        <td>{{ record.employee.name }}</td>
-                        <td>{{ record.attended|yesno:"Yes,No" }}</td>
-                        <td>{{ record.created_at }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="3">No attendance records found.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="container-fluid">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-xl-10 col-sm-9 box-col-3">
+                <h3>Employee Attendance</h3>
+            </div>
+        </div>
     </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="list-product">
+                            <table class="table" id="attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        {% for date in date_range %}
+                                            <th>{{ date|date:"M d" }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in employees %}
+                                        <tr>
+                                            <td>{{ employee.name }}</td>
+                                            {% for date in date_range %}
+                                                {% with key=employee.id|stringformat:"s"|add:"_"|add:date %}
+                                                    <td>
+                                                        <input type="checkbox" name="attendance" value="{{ employee.id }}_{{ date }}"
+                                                        {% if key in attendance_set %} checked {% endif %}>
+                                                    </td>
+                                                {% endwith %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="{{ date_range|length|add:"1" }}">No employees found.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Update Attendance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock content %}
