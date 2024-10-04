@@ -1,6 +1,9 @@
 from home.forms import *
 from home.models import *
+from django.utils import timezone
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -85,3 +88,24 @@ def deleteEmployees(request, id):
     employee.delete()
     messages.success(request, 'Employee deleted successfully.')
     return redirect('getEmployees')
+
+@csrf_exempt
+def recordAttendance(request):
+    if request.method == 'POST':
+        tag_id = request.POST.get('tag_id')
+        if not tag_id:
+            return JsonResponse({'status': 'error', 'message': 'No tag_id provided'}, status=400)
+        try:
+            employee = Employee.objects.get(tag_id=tag_id)
+            today = timezone.now().date()
+            # Check if attendance for today has already been recorded
+            attendance_exists = EmployeeAttendance.objects.filter(employee=employee, created_at__date=today).exists()
+            if attendance_exists:
+                return JsonResponse({'status': 'error', 'message': 'Attendance already recorded for today'}, status=400)
+            # Record attendance
+            EmployeeAttendance.objects.create(employee=employee, attended=True)
+            return JsonResponse({'status': 'success', 'message': 'Attendance recorded', 'employee': employee.name})
+        except Employee.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Employee not found'}, status=404)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
