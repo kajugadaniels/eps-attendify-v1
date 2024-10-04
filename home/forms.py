@@ -7,7 +7,7 @@ class EmployeeForm(forms.ModelForm):
         fields = ['name', 'national_id', 'email', 'department', 'position', 'date_of_hire', 'tag_id', 'phone_number', 'address', 'day_salary']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
-            'national_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'national_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'department': forms.TextInput(attrs={'class': 'form-control'}),
             'position': forms.Select(attrs={'class': 'form-control'}),

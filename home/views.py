@@ -64,7 +64,7 @@ def editEmployees(request, id):
             employee = form.save(commit=False)
             employee.save()
             messages.success(request, 'Employee updated successfully.')
-            return redirect('viewEmployees', id=employee.id)
+            return redirect('base:getEmployees', id=employee.id)
         else:
             for field, errors in form.errors.items():
                 for error in errors:
