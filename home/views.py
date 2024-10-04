@@ -118,8 +118,8 @@ def getAttendance(request):
     date_range = [today + timedelta(days=i) for i in range(8)]  # Today + next 7 days
 
     if request.method == 'POST':
-        # Clear existing attendance records for the date range
-        EmployeeAttendance.objects.filter(created_at__date__in=date_range).delete()
+        # Clear existing attendance records for today
+        EmployeeAttendance.objects.filter(created_at__date=today).delete()
 
         # Process the submitted attendance data
         attendance_data = request.POST.getlist('attendance')
@@ -128,8 +128,12 @@ def getAttendance(request):
             employee = Employee.objects.get(id=employee_id)
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
+            # Ensure we're only processing today's date
+            if date != today:
+                continue  # Skip if not today
+
             # Create attendance record
-            EmployeeAttendance.objects.create(employee=employee, attended=True, created_at=date)
+            EmployeeAttendance.objects.create(employee=employee, attended=True, created_at=timezone.now())
 
         messages.success(request, 'Attendance updated successfully.')
         return redirect('base:getAttendance')
@@ -137,7 +141,7 @@ def getAttendance(request):
     # Get all employees
     employees = Employee.objects.all().order_by('name')
 
-    # Get existing attendance records in the date range
+    # Get existing attendance records for today
     attendance_records = EmployeeAttendance.objects.filter(created_at__date__in=date_range)
 
     # Build a set of attendance keys for quick lookup in the template
@@ -150,6 +154,7 @@ def getAttendance(request):
         'employees': employees,
         'date_range': date_range,
         'attendance_set': attendance_set,
+        'today': today,
     }
 
     return render(request, 'attendance/index.html', context)
