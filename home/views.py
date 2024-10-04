@@ -109,3 +109,13 @@ def recordAttendance(request):
             return JsonResponse({'status': 'error', 'message': 'Employee not found'}, status=404)
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+@login_required
+def getAttendance(request):
+    attendance_records = EmployeeAttendance.objects.all().order_by('-created_at')
+
+    context = {
+        'attendance_records': attendance_records
+    }
+
+    return render(request, 'attendance/index.html', context)
