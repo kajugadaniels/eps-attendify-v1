@@ -14,6 +14,6 @@ class EmployeeForm(forms.ModelForm):
             'date_of_hire': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'tag_id': forms.TextInput(attrs={'class': 'form-control'}),
             'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
-            'address': forms.Textarea(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
             'day_salary': forms.NumberInput(attrs={'class': 'form-control'}),
         }

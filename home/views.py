@@ -31,7 +31,7 @@ def addEmployees(request):
             employee = form.save(commit=False)
             employee.save()
             messages.success(request, 'Employee added successfully.')
-            return redirect('getEmployees')
+            return redirect('base:getEmployees')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
