@@ -20,3 +20,12 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.position.name if self.position else 'No Position'}"
+
+class EmployeeAttendance(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    attended = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        status = 'Attended' if self.attended else 'Absent'
+        return f"{self.employee.name} - {status} on {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
