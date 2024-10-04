@@ -15,7 +15,7 @@ def dashboard(request):
 
 @login_required
 def getEmployees(request):
-    employees = Employee.objects.all().order_by('-date_of_hire')
+    employees = Employee.objects.all().order_by('-id')
 
     context = {
         'employees': employees
