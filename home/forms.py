@@ -16,4 +16,13 @@ class EmployeeForm(forms.ModelForm):
             'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'day_salary': forms.NumberInput(attrs={'class': 'form-control'}),
+            'week_ending': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'budget_ref': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'supervision': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'field': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'type': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'nid': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'rssb_number': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'rate': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'gross': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
         }
