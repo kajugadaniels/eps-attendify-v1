@@ -4,7 +4,7 @@ from home.models import *
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ['name', 'national_id', 'email', 'department', 'position', 'date_of_hire', 'tag_id', 'phone_number', 'address', 'day_salary']
+        fields = ['name', 'national_id', 'email', 'department', 'position', 'date_of_hire', 'tag_id', 'phone_number', 'address', 'day_salary', 'week_ending', 'budget_ref', 'supervision', 'field', 'type', 'nid', 'rssb_number', 'rate', 'gross']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'required': 'true'}),
             'national_id': forms.NumberInput(attrs={'class': 'form-control'}),
